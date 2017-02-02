@@ -70,6 +70,7 @@ LICENSE file.
     <maven.dependency.version>2.10</maven.dependency.version>
     <hbase10.version>1.0.2</hbase10.version>
     <cassandra.cql.version>3.0.0</cassandra.cql.version>
+    <kairosdb.client.version>2.1.1</kairosdb.client.version>
     <mongodb.version>3.0.3</mongodb.version>
     <mongodb.async.version>2.0.1</mongodb.async.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -84,6 +85,7 @@ LICENSE file.
     <module>cassandra</module>
     <module>distribution</module>
     <module>hbase10</module>
+    <module>kairosdb</module>
     <module>mongodb</module>
   </modules>
 
