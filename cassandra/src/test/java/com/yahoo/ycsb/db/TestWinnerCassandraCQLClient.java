@@ -28,7 +28,7 @@ public class TestWinnerCassandraCQLClient {
   // Change the default Cassandra timeout from 10s to 120s for slow CI machines
   private final static long timeout = 120000L;
 
-  private final static String TABLE = "samples";  // todo: maybe it has to be usertable
+  private final static String TABLE = "samples";
   private final static String METRIC = "sensormetric";
   private final static String HOST = "localhost";
   private final static String PORT = "9042";

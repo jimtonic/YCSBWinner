@@ -27,7 +27,6 @@ public class KairosDBClient extends DB {
   public static final String HOST_PROPERTY_DEFAULT = "localhost";
   public static final String PORT_PROPERTY = "port";
   public static final String PORT_PROPERTY_DEFAULT = "8071";
-  // todo: muss über das propertiesfile konfigurierbar sein
 
   private HttpClient client = null;
   private String host = "localhost";
