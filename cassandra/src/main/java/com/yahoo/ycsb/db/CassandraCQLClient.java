@@ -54,10 +54,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class CassandraCQLClient extends DB {
 
   private static Cluster cluster = null;
-  private static Session session = null;
+  protected Session session = null;
 
   private static ConsistencyLevel readConsistencyLevel = ConsistencyLevel.ONE;
-  private static ConsistencyLevel writeConsistencyLevel = ConsistencyLevel.ONE;
+  protected ConsistencyLevel writeConsistencyLevel = ConsistencyLevel.ONE;
 
   public static final String YCSB_KEY = "y_id";
   public static final String KEYSPACE_PROPERTY = "cassandra.keyspace";
@@ -94,9 +94,9 @@ public class CassandraCQLClient extends DB {
    */
   private static final AtomicInteger INIT_COUNT = new AtomicInteger(0);
 
-  private static boolean debug = false;
+  protected boolean debug = false;
 
-  private static boolean trace = false;
+  protected boolean trace = false;
   
   /**
    * Initialize any state for this DB. Called once per DB instance; there is one
