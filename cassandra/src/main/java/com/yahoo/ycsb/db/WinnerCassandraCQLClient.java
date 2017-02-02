@@ -26,6 +26,7 @@ public class WinnerCassandraCQLClient extends CassandraCQLClient {
       Double value = Double.parseDouble(keyparts[2]);
       ByteBuffer buf = ByteBuffer.allocate(8);
       buf.putDouble(value);
+      buf.flip();
 
       Insert insertStmt = QueryBuilder.insertInto(table);
       insertStmt.value("metric", metricname);
