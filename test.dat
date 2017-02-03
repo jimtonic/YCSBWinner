@@ -1,0 +1,7 @@
+workload=com.yahoo.ycsb.workloads.WinnerWorkload
+
+hosts=127.0.0.1
+#port=8071
+
+recordcount = 10000
+operationcount = 20000

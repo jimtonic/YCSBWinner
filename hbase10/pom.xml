@@ -68,5 +68,10 @@ LICENSE file.
         </exclusion>
       </exclusions>
     </dependency>
+    <dependency>
+      <groupId>org.apache.hbase</groupId>
+      <artifactId>hbase-server</artifactId>
+      <version>1.0.2</version>
+    </dependency>
   </dependencies>
 </project>
