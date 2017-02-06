@@ -2,6 +2,7 @@ package com.yahoo.ycsb.db;
 
 import com.yahoo.ycsb.ByteIterator;
 import com.yahoo.ycsb.Status;
+import com.yahoo.ycsb.StringByteIterator;
 import com.yahoo.ycsb.generator.UniformDoubleGenerator;
 import com.yahoo.ycsb.generator.UnixEpochTimestampGenerator;
 import com.yahoo.ycsb.measurements.Measurements;
@@ -15,9 +16,7 @@ import org.junit.*;
 
 import java.util.HashMap;
 import java.util.Properties;
-import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assume.assumeTrue;
 
 public class WinnerHBaseClientTest {
@@ -29,7 +28,8 @@ public class WinnerHBaseClientTest {
   private WinnerHBaseClient client;
   private Table table = null;
 
-  private HashMap<String, ByteIterator> tags;
+  private UnixEpochTimestampGenerator tGen;
+  private UniformDoubleGenerator vGen;
 
   private static boolean isWindows() {
     final String os = System.getProperty("os.name");
@@ -74,10 +74,12 @@ public class WinnerHBaseClientTest {
     Measurements.setProperties(p);
     final WinnerWorkload workload = new WinnerWorkload();
     workload.init(p);
-    tags = workload.buildTags();
 
     client.setProperties(p);
     client.init();
+
+    tGen = new UnixEpochTimestampGenerator(1, java.util.concurrent.TimeUnit.SECONDS, 1);
+    vGen = new UniformDoubleGenerator(-10.0, 10.0);
   }
 
   @After
@@ -87,15 +89,25 @@ public class WinnerHBaseClientTest {
   }
 
   @Test
-  public void testFoobar() throws Exception {
-    UnixEpochTimestampGenerator tGen = new UnixEpochTimestampGenerator(1, TimeUnit.SECONDS, System.currentTimeMillis()/1000);
-    String metric = "sensormetric";
-    UniformDoubleGenerator vGen = new UniformDoubleGenerator(-10.0, 10.0);
+  public void testInsert() throws Exception {
+    for (int i = 0; i < 1000; i++) {
+      Status status = client.insert("samples", getNextKey(), getTags());
+      Assert.assertEquals(Status.OK, status);
+    }
+  }
 
-    long timestamp = tGen.nextValue();
-    Double value = vGen.nextValue();
-    String key = metric + ":" + timestamp + ":" + value;
-    Status status = client.insert(TABLE, key, tags);
-    assertEquals(Status.OK, status);
+  private String getNextKey() {
+    long ts = tGen.nextValue();
+    double val = vGen.nextValue();
+    String key = "sensormetric:"+ts+":"+val;
+    return key;
+  }
+
+  private HashMap<String, ByteIterator> getTags() {
+    HashMap<String, String> tags = new HashMap<>();
+    for (int i = 0; i < 5; i++) {
+      tags.put("tag"+i, "value"+i);
+    }
+    return StringByteIterator.getByteIteratorMap(tags);
   }
 }
