@@ -19,7 +19,7 @@ import static java.lang.Double.NaN;
 
 
 /**
- * MongiDB Client to use within the WINNER project.
+ * MongoDB Client to use within the WINNER project.
  */
 public class WinnerMongoDbClient extends MongoDbClient {
 
