@@ -1,13 +1,8 @@
 package com.yahoo.ycsb.db;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.yahoo.ycsb.ByteIterator;
-import com.yahoo.ycsb.DBException;
 import com.yahoo.ycsb.Status;
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.hbase.HBaseConfiguration;
-import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.*;
+import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.util.Bytes;
 
 import java.io.IOException;
@@ -15,77 +10,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import static com.yahoo.ycsb.workloads.CoreWorkload.TABLENAME_PROPERTY;
-import static com.yahoo.ycsb.workloads.CoreWorkload.TABLENAME_PROPERTY_DEFAULT;
 
 /**
  * HBase Client to use within the WINNER project.
+ *
+ * Create Table 'samples' and columnfamily 'cf': create 'samples', 'cf'
  */
 public class WinnerHBaseClient extends HBaseClient10 {
-  private Configuration config = HBaseConfiguration.create();
-
-  private static AtomicInteger threadCount = new AtomicInteger(0);
-
-  private static Connection connection = null;
-  private static final Object CONNECTION_LOCK = new Object();
-  private String tableName = "";
-  private Table currentTable = null;
-
-  private String columnFamily = "";
-  private byte[] columnFamilyBytes;
-
-
-  @Override
-  public void init() throws DBException {
-//    tableName = TableName.valueOf(getProperties().getProperty("table"));
-//    config.set("hbase.zookeeper.property.clientPort", "2181");
-//    config.set("hbase.zookeeper.quorum", "localhost");
-
-    try {
-      threadCount.getAndIncrement();
-      synchronized (CONNECTION_LOCK) {
-        if (connection == null) {
-          // Initialize if not set up already.
-          connection = ConnectionFactory.createConnection(config);
-        }
-      }
-    } catch (java.io.IOException e) {
-      throw new DBException(e);
-    }
-
-    columnFamily = getProperties().getProperty("columnfamily");
-    if (columnFamily == null) {
-      System.err.println("Error, must specify a columnfamily for HBase table");
-      throw new DBException("No columnfamily specified");
-    }
-    columnFamilyBytes = Bytes.toBytes(columnFamily);
-
-    String table = getProperties().getProperty(TABLENAME_PROPERTY, TABLENAME_PROPERTY_DEFAULT);
-    try {
-      final TableName tName = TableName.valueOf(table);
-      synchronized (CONNECTION_LOCK) {
-        connection.getTable(tName).getTableDescriptor();
-      }
-    } catch (IOException e) {
-      System.out.println("---- TABLE SOES NOT EXIST! ----");
-      throw new DBException(e);
-    }
-
-  }
-
-  @Override
-  public void cleanup() throws DBException {
-
-  }
-
-  public void getHTable(String table) throws IOException {
-    final TableName tName = TableName.valueOf(table);
-    synchronized (CONNECTION_LOCK) {
-      this.currentTable = connection.getTable(tName);
-    }
-  }
 
   @Override
   public Status read(String table, String key, Set<String> fields, HashMap<String, ByteIterator> result) {
@@ -146,13 +77,4 @@ public class WinnerHBaseClient extends HBaseClient10 {
     return null;
   }
 
-  @VisibleForTesting
-  void setConfiguration(final Configuration newConfig) {
-    this.config = newConfig;
-  }
-
-  @VisibleForTesting
-  Connection getConnection() {
-    return connection;
-  }
 }
