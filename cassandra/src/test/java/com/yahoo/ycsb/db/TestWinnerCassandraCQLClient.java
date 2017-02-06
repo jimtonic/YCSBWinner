@@ -11,18 +11,15 @@ import com.yahoo.ycsb.generator.UniformDoubleGenerator;
 import com.yahoo.ycsb.generator.UnixEpochTimestampGenerator;
 import com.yahoo.ycsb.measurements.Measurements;
 import com.yahoo.ycsb.workloads.WinnerWorkload;
-import org.apache.commons.lang3.time.DateUtils;
 import org.cassandraunit.CassandraCQLUnit;
 import org.cassandraunit.dataset.cql.ClassPathCQLDataSet;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Test;
+import org.junit.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
-
-import static junit.framework.TestCase.assertEquals;
 
 public class TestWinnerCassandraCQLClient {
   // Change the default Cassandra timeout from 10s to 120s for slow CI machines
@@ -52,11 +49,6 @@ public class TestWinnerCassandraCQLClient {
 
   @Before
   public void setUp() throws Exception {
-    Date date = new Date(1);
-    System.out.println(DateUtils.truncate(date, Calendar.DAY_OF_MONTH).toString());
-
-    date = new Date(86400000);
-    System.out.println(DateUtils.truncate(date, Calendar.DAY_OF_MONTH).toString());
     session = cassandraUnit.getSession();
     Properties p = new Properties();
     p.setProperty("hosts", HOST);
@@ -103,13 +95,17 @@ public class TestWinnerCassandraCQLClient {
 
   @Test
   public void testInsert() throws Exception {
-    long timestamp = tGen.nextValue();
-    Double value = vGen.nextValue();
-    HashMap<String, ByteIterator> tags = generateTags();
-    String key = METRIC+":"+timestamp+":"+value;
+    for (int i = 0; i < 1000; i++) {
+      Status status = client.insert("samples", getNextKey(), generateTags());
+      Assert.assertEquals(Status.OK, status);
+    }
+  }
 
-    Status status = client.insert(TABLE, key, tags);
-    assertEquals(Status.OK, status);
+  private String getNextKey() {
+    long ts = tGen.nextValue();
+    double val = vGen.nextValue();
+    String key = "sensormetric:"+ts+":"+val;
+    return key;
   }
 
   private HashMap<String, ByteIterator> generateTags() {

@@ -22,7 +22,8 @@ public class WinnerCassandraCQLClient extends CassandraCQLClient {
     try {
       String[] keyparts = key.split(":");
       String metricname = keyparts[0];
-      long timestamp = Long.parseLong(keyparts[1]);
+      long timestamp = Long.parseLong(keyparts[1]) * 1000;
+      Date bucketDate = DateUtils.truncate(new Date(timestamp), Calendar.HOUR);
       Double value = Double.parseDouble(keyparts[2]);
       ByteBuffer buf = ByteBuffer.allocate(8);
       buf.putDouble(value);
@@ -30,7 +31,7 @@ public class WinnerCassandraCQLClient extends CassandraCQLClient {
 
       Insert insertStmt = QueryBuilder.insertInto(table);
       insertStmt.value("metric", metricname);
-      insertStmt.value("date", DateUtils.truncate(new Date(timestamp), Calendar.DAY_OF_MONTH).toString());
+      insertStmt.value("date", String.valueOf(bucketDate.getTime()/1000));
       insertStmt.value("event_time", timestamp);
       insertStmt.value("value", buf);
       insertStmt.value("attributes", StringByteIterator.getStringMap(values));
