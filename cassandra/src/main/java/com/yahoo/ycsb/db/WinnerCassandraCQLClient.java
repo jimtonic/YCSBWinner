@@ -15,6 +15,16 @@ import java.util.HashMap;
 
 /**
  * Cassandra CQL Client to use within the WINNER project.
+ *
+ * create table 'samples':
+ *  CREATE TABLE samples (
+ *      metric        text,
+ *      date          text,
+ *      event_time  timestamp,
+ *      value         blob,
+ *      attributes    map<text, text>,
+ *      PRIMARY KEY((metric, date), event_time)
+    );
  */
 public class WinnerCassandraCQLClient extends CassandraCQLClient {
   @Override
