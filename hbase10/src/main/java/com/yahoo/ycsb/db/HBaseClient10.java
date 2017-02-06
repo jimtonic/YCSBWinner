@@ -66,13 +66,13 @@ import static com.yahoo.ycsb.workloads.CoreWorkload.TABLENAME_PROPERTY_DEFAULT;
  * durability.
  */
 public class HBaseClient10 extends com.yahoo.ycsb.DB {
-  private Configuration config = HBaseConfiguration.create();
+  protected Configuration config = HBaseConfiguration.create();
 
-  private static AtomicInteger threadCount = new AtomicInteger(0);
+  protected static AtomicInteger threadCount = new AtomicInteger(0);
 
-  private boolean debug = false;
+  protected boolean debug = false;
 
-  private String tableName = "";
+  protected String tableName = "";
 
   /**
    * A Cluster Connection instance that is shared by all running ycsb threads.
@@ -81,32 +81,32 @@ public class HBaseClient10 extends com.yahoo.ycsb.DB {
    * with a 'lock' object.
    * @See #CONNECTION_LOCK.
    */
-  private static Connection connection = null;
-  private static final Object CONNECTION_LOCK = new Object();
+  protected static Connection connection = null;
+  protected static final Object CONNECTION_LOCK = new Object();
 
   // Depending on the value of clientSideBuffering, either bufferedMutator
   // (clientSideBuffering) or currentTable (!clientSideBuffering) will be used.
-  private Table currentTable = null;
-  private BufferedMutator bufferedMutator = null;
+  protected Table currentTable = null;
+  protected BufferedMutator bufferedMutator = null;
 
-  private String columnFamily = "";
-  private byte[] columnFamilyBytes;
+  protected String columnFamily = "";
+  protected byte[] columnFamilyBytes;
 
   /**
    * Durability to use for puts and deletes.
    */
-  private Durability durability = Durability.USE_DEFAULT;
+  protected Durability durability = Durability.USE_DEFAULT;
 
   /** Whether or not a page filter should be used to limit scan length. */
-  private boolean usePageFilter = true;
+  protected boolean usePageFilter = true;
 
   /**
    * If true, buffer mutations on the client. This is the default behavior for
    * HBaseClient. For measuring insert/update/delete latencies, client side
    * buffering should be disabled.
    */
-  private boolean clientSideBuffering = false;
-  private long writeBufferSize = 1024 * 1024 * 12;
+  protected boolean clientSideBuffering = false;
+  protected long writeBufferSize = 1024 * 1024 * 12;
 
   /**
    * Initialize any state for this DB. Called once per DB instance; there is one
