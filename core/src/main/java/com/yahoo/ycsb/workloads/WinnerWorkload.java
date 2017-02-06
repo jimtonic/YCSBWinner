@@ -51,7 +51,7 @@ public class WinnerWorkload extends Workload {
   public static final String TIMESTAMP_START_PROPERTY_DEFAULT = "1";
   long timestampStart;
   public static final String TIMESTAMP_INTERVAL_PROPERTY = "timestamp.interval";
-  public static final String TIMESTAMP_INTERVAL_PROPERTY_DEFAULT = "1000";
+  public static final String TIMESTAMP_INTERVAL_PROPERTY_DEFAULT = "1";
   int timestampInterval;
   public static final String TIMESTAMP_INTERVAL_UNIT_PROPERTY = "timestamp.unit";
   public static final String TIMESTAMP_INTERVAL_UNIT_PROPERTY_DEFAULT = "SECONDS";
