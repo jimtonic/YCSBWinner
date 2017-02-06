@@ -69,47 +69,47 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class MongoDbClient extends DB {
 
   /** Used to include a field in a response. */
-  private static final Integer INCLUDE = Integer.valueOf(1);
+  protected static final Integer INCLUDE = Integer.valueOf(1);
 
   /** The options to use for inserting many documents. */
-  private static final InsertManyOptions INSERT_UNORDERED =
+  protected static final InsertManyOptions INSERT_UNORDERED =
       new InsertManyOptions().ordered(false);
 
   /** The options to use for inserting a single document. */
-  private static final UpdateOptions UPDATE_WITH_UPSERT = new UpdateOptions()
+  protected static final UpdateOptions UPDATE_WITH_UPSERT = new UpdateOptions()
       .upsert(true);
 
   /**
    * The database name to access.
    */
-  private static String databaseName;
+  protected static String databaseName;
 
   /** The database name to access. */
-  private static MongoDatabase database;
+  protected static MongoDatabase database;
 
   /**
    * Count the number of times initialized to teardown on the last
    * {@link #cleanup()}.
    */
-  private static final AtomicInteger INIT_COUNT = new AtomicInteger(0);
+  protected static final AtomicInteger INIT_COUNT = new AtomicInteger(0);
 
   /** A singleton Mongo instance. */
-  private static MongoClient mongoClient;
+  protected static MongoClient mongoClient;
 
   /** The default read preference for the test. */
-  private static ReadPreference readPreference;
+  protected static ReadPreference readPreference;
 
   /** The default write concern for the test. */
-  private static WriteConcern writeConcern;
+  protected static WriteConcern writeConcern;
 
   /** The batch size to use for inserts. */
-  private static int batchSize;
+  protected static int batchSize;
 
   /** If true then use updates with the upsert option for inserts. */
-  private static boolean useUpsert;
+  protected static boolean useUpsert;
 
   /** The bulk inserts pending for the thread. */
-  private final List<Document> bulkInserts = new ArrayList<Document>();
+  protected final List<Document> bulkInserts = new ArrayList<Document>();
 
   /**
    * Cleanup any state for this DB. Called once per DB instance; there is one DB
