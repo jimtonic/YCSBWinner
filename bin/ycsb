@@ -60,6 +60,7 @@ DATABASES = {
     "mongodb"      : "com.yahoo.ycsb.db.MongoDbClient",
     "mongodb-async": "com.yahoo.ycsb.db.AsyncMongoDbClient",
     "mongodb-winner"      : "com.yahoo.ycsb.db.WinnerMongoDbClient",
+    "opentsdb"      : "com.yahoo.ycsb.db.OpenTSDBClient",
 }
 
 OPTIONS = {

@@ -87,6 +87,7 @@ LICENSE file.
     <module>hbase10</module>
     <module>kairosdb</module>
     <module>mongodb</module>
+    <module>opentsdb</module>
   </modules>
 
   <build>
